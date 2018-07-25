@@ -19,3 +19,8 @@ a:hover
 	max-width: 864px;
 	overflow: auto;
 }
+.mapDiv
+{
+	width: 400px;
+	height: 400px;
+}
