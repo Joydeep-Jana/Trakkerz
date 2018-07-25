@@ -1,0 +1,21 @@
+body, html 
+{
+	background: #E9EBEE!important;
+	font: normal 1rem/1.2rem "Montserrat", sans-serif!important;
+}
+
+a
+{
+	text-decoration: none;
+	color: rgba(77, 121, 191, 1.0)!important;
+}
+
+a:hover
+{
+	text-decoration: none;
+}
+.tableForLead
+{
+	max-width: 864px;
+	overflow: auto;
+}
