@@ -11,7 +11,7 @@ function createJSON(params, values)
 	{
 		json[params[i]] = values[i];
 	}
-
+	console.log(json);
 	return JSON.stringify(json);
 }
 

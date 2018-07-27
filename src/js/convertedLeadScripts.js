@@ -9,6 +9,7 @@ $(document).ready(function()
     // });
     $("#col2").on("click", "#btnSubmit", submited);
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    $("#convertedLeadTable").dataTable();
 });
 
 function submited()
@@ -30,13 +31,15 @@ function submited()
     }
     if(group == 0)
     {
-        alert("Please select a group");
-        return;
+        // alert("Please select a group");
+        // return;
+        group = null;
     }
     if(personId == 0)
     {
-        alert("Please select a person");
-        return;
+        // alert("Please select a person");
+        // return;
+        personId = null;
     }
     var params = ["FromDate","ToDate", "PersonId", "GroupId"];
     var values = [fromDate,toDate, group, personId];
