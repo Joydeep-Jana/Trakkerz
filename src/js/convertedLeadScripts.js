@@ -88,7 +88,7 @@ function submitedResponse(res)
 function gatherGroups()
 {
     var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
-    var dataString = {"OrganizationId=1":1};
+    var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
     {
@@ -96,12 +96,16 @@ function gatherGroups()
         html = "<option value=0 >Select Group</option>";
         for(var index=0; index<data.length; index++)
         {
-            html += "<option value='" + data[index].GroupId + "'>" + data[index].GroupName + "</option>";
+            var name = data[index].GroupName;
+            if(name.length>27)
+            {
+                name = name.substring(0, 27) + "...";
+            }
+            html += "<option value='" + data[index].GroupId + "'>" + name + "</option>";
         }
         $("#formControlSelectGroup").html(html);
     });
 }
-
 function groupChanged()
 {
     if(this.value != "" && this.value != "Select Group")
@@ -109,11 +113,12 @@ function groupChanged()
         var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
+            // console.log(res);
             var data = res.ResponseObject;
-            var html = "<option value=0 >Select Person</option>";
+            var html = "<option>Select Person</option>";
             for(var index=0; index<data.length; index++)
             {
-                html += "<option value='" + data[index].PersonId + "'>" + data[index].FirstName + data[index].LastName + "</option>";
+                html += "<option value='" + data[index].PersonId + "'>" + data[index].FirstName + " " + data[index].LastName + "</option>";
             }
             $("#formControlSelectPerson").html(html);
         });

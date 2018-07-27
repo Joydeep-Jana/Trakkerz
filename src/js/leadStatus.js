@@ -8,7 +8,7 @@ $(document).ready(function(){
 function gatherGroups()
 {
     var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
-    var dataString = {"OrganizationId=1":1};
+    var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
     {
@@ -16,7 +16,12 @@ function gatherGroups()
         html = "<option value=0 >Select Group</option>";
         for(var index=0; index<data.length; index++)
         {
-            html += "<option value='" + data[index].GroupId + "'>" + data[index].GroupName + "</option>";
+            var name = data[index].GroupName;
+            if(name.length>27)
+            {
+                name = name.substring(0, 27) + "...";
+            }
+            html += "<option value='" + data[index].GroupId + "'>" + name + "</option>";
         }
         $("#formControlSelectGroup").html(html);
     });
@@ -28,6 +33,7 @@ function groupChanged()
         var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
+            // console.log(res);
             var data = res.ResponseObject;
             var html = "<option>Select Person</option>";
             for(var index=0; index<data.length; index++)
@@ -49,26 +55,26 @@ function submited()
     var toDate = $("#selToDate").val();
     var personId = $("#formControlSelectPerson").val();
     var group = $("#formControlSelectGroup").val();
-    // if(fromDate == "")
-    // {
-    //     alert("Please select a date");
-    //     return;
-    // }
-    // if(toDate == "")
-    // {
-    //     alert("Please select a date");
-    //     return;
-    // }
-    // if(group == 0)
-    // {
-    //     alert("Please select a group");
-    //     return;
-    // }
-    // if(personId == 0)
-    // {
-    //     alert("Please select a person");
-    //     return;
-    // }
+    if(fromDate == "")
+    {
+        alert("Please select a date");
+        return;
+    }
+    if(toDate == "")
+    {
+        alert("Please select a date");
+        return;
+    }
+    if(group == 0)
+    {
+        alert("Please select a group");
+        return;
+    }
+    if(personId == 0)
+    {
+        alert("Please select a person");
+        return;
+    }
     
     var params = ["FromDate","Todate", "GroupId", "PersonId"];
     var values = ['2018-01-01', "2018-05-01", 7598, 8856];
@@ -79,45 +85,52 @@ function submited()
 
 function submitedResponse(res)
 {
-    var responseData = res.ResponseObject;
-    var tableData = new Array();
-    for(var index=0; index<responseData.length; index++)
+    console.log(res);
+    if(res.IsOk)
     {
-        var rawData = responseData[index];
-        var row = new Array();
-        row.push(rawData.LeadName);
-        row.push(rawData.SchoolContactPerson);
-        row.push(rawData.ContactNumber);
-        row.push(rawData.State);
-        row.push(rawData.City);
-        row.push(rawData.LeadCreator);
-        var status = rawData.SPENDStatus;
-        switch(status)
+        var responseData = res.ResponseObject;
+        var tableData = new Array();
+        for(var index=0; index<responseData.length; index++)
         {
-            case 'D':
-                status = "Done";
-                break;
-            case 'N':
-                status = "Not Done";
-                break;
-            case 'S':
-                status = "Suspecting";
-                break;
-            case 'P':
-                status = "Prospecting";
-                break;
-            case 'E':
-                status = "Expecting";
-                break;
+            var rawData = responseData[index];
+            var row = new Array();
+            row.push(rawData.LeadName);
+            row.push(rawData.SchoolContactPerson);
+            row.push(rawData.ContactNumber);
+            row.push(rawData.State);
+            row.push(rawData.City);
+            row.push(rawData.LeadCreator);
+            var status = rawData.SPENDStatus;
+            switch(status)
+            {
+                case 'D':
+                    status = "Done";
+                    break;
+                case 'N':
+                    status = "Not Done";
+                    break;
+                case 'S':
+                    status = "Suspecting";
+                    break;
+                case 'P':
+                    status = "Prospecting";
+                    break;
+                case 'E':
+                    status = "Expecting";
+                    break;
+            }
+            row.push(status);
+            row.push(rawData.LastVisited);
+            row.push(rawData.Remarks);
+            tableData.push(row);    
         }
-        row.push(status);
-        row.push(rawData.LastVisited);
-        row.push(rawData.Remarks);
-        tableData.push(row);    
+        console.log(tableData);
+        $("#leadStatusTable").dataTable({
+            destroy:true,
+            data:tableData
+        });
     }
-    console.log(tableData);
-    $("#leadStatusTable").dataTable({
-        destroy:true,
-        data:tableData
-    });
+    else{
+        alert(res.Message);
+    }
 }
