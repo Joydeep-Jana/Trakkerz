@@ -3,10 +3,6 @@ w3.includeHTML();
 $(document).ready(function()
 {
     gatherGroups();
-    // $('#example').DataTable(
-    // {
-
-    // });
     $("#col2").on("click", "#btnSubmit", submited);
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
     $("#convertedLeadTable").dataTable();
@@ -72,6 +68,25 @@ function submitedResponse(res)
             dataArray.push(temp);
         }
         console.log(dataArray);
+        var tableHtml = '<table id="convertedLeadTable" class="table table-striped table-bordered" style="width:100%">'+
+        '<thead>'+
+            '<tr>'+
+                '<th>Id</th>'+
+                '<th>Creator</th>'+
+                '<th>Lead Name</th>'+
+                '<th>Contact No.</th>'+
+                '<th>Next Appoinment Date</th>'+
+                '<th>School Contact Person</th>'+
+                '<th>State</th>'+
+                '<th>City</th>'+
+                '<th>Address</th>'+
+                '<th>Remark</th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+        '</body>'+
+        '</table>';
+        $(".tableForLead").html(tableHtml);
         $("#convertedLeadTable").dataTable(
             {
                 destroy:true,

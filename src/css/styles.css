@@ -16,7 +16,7 @@ a:hover
 }
 .tableForLead
 {
-	max-width: 864px;
+	width: 100%;
 	font-size:12px;
 	overflow: auto;
 }

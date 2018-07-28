@@ -125,6 +125,24 @@ function submitedResponse(res)
             tableData.push(row);    
         }
         console.log(tableData);
+        var tableHtml = '<table id="leadStatusTable" class="table table-striped table-bordered" style="width:100%">'+
+        '<thead>'+
+            '<tr>'+
+                '<th>School Name</th>'+
+                '<th>Contact Person</th>'+
+                '<th>contact no</th>'+
+                '<th>state</th>'+
+                '<th>city</th>'+
+                '<th>Executive</th>'+
+                '<th>Lead Status</th>'+
+                '<th>Last Visit Date</th>'+
+                '<th>Feedback</th>'+
+            '</tr>'+
+        '</thead>'+
+        '<tbody>'+
+        '</tbody>'+
+    '</table>';
+        $(".tableForLead").html(tableHtml);
         $("#leadStatusTable").dataTable({
             destroy:true,
             data:tableData
