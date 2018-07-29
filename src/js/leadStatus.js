@@ -77,8 +77,8 @@ function submited()
     }
     
     var params = ["FromDate","Todate", "GroupId", "PersonId"];
-    var values = ['2018-01-01', "2018-05-01", 7598, 8856];
-    // var values = [fromDate, toDate, group, personId];
+    // var values = ['2018-01-01', "2018-05-01", 7598, 8856];
+    var values = [fromDate, toDate, group, personId];
     var dataString = createJSON(params,values);
     ajaxCall(url, "POST", dataString, "application/json", submitedResponse);
 }
@@ -125,7 +125,7 @@ function submitedResponse(res)
             tableData.push(row);    
         }
         console.log(tableData);
-        var tableHtml = '<table id="leadStatusTable" class="table table-striped table-bordered" style="width:100%">'+
+        var tableHtml = '<table id="leadStatusTable" class="table table-striped table-bordered">'+
         '<thead>'+
             '<tr>'+
                 '<th>School Name</th>'+

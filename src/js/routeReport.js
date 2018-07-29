@@ -47,7 +47,9 @@ function submited()
     
     var params = ["OrganizationId","PersonId", "GroupId", "ActivityDate"];
     var values = [1, 8856, 7598, date];
+    // var values = [1, personId, group, date];
     var dataString = createJSON(params,values);
+    console.log(dataString);
     ajaxCall(url, "POST", dataString, "application/json", submitedResponse);
 }
 

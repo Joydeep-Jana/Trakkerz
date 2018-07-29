@@ -68,7 +68,7 @@ function submitedResponse(res)
             dataArray.push(temp);
         }
         console.log(dataArray);
-        var tableHtml = '<table id="convertedLeadTable" class="table table-striped table-bordered" style="width:100%">'+
+        var tableHtml = '<table id="convertedLeadTable" class="table table-striped table-bordered">'+
         '<thead>'+
             '<tr>'+
                 '<th>Id</th>'+

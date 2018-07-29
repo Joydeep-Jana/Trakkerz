@@ -86,7 +86,24 @@ $(document).ready(function()
                         '</tr>' +
                         '</div>';
             }
-
+            var tableHTML = '<table id="leadTableReport" class="table table-striped table-bordered table-responsive" font-size:14px;>'+
+            '<thead>'+
+                '<tr>'+
+                    '<th>School Name</th>'+
+					'<th>School Address</th>'+
+					'<th>School Contact Person</th>'+
+					'<th>Contact No</th>'+
+					'<th>School Setup</th>'+
+                    '<th>City</th>'+
+                    '<th>State</th>'+
+                    '<th>Executive Name</th>'+
+                '</tr>'+
+            '</thead>'+
+            '<tbody id="leadTableRows">'+
+            '</tbody>'+
+            '</table>';
+            console.log(tableHTML);
+            $(".verifiedTableForLead").html(tableHTML);
             $("#leadTableRows").html(html);
             $('#leadTableReport').DataTable(); 
         }
