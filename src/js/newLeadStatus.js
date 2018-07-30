@@ -46,7 +46,7 @@ $(document).on("click", "#btnSubmit", function()
 function newLeadSuccess(res)
 {
     console.log(res);
-    if(!!res.IsOk === true)
+    if(res.IsOk)
 	{
 		res = res.ResponseObject;
 		var html = '';
@@ -97,7 +97,7 @@ function newLeadSuccess(res)
                     '</tr>' +
                     '</div>';
         }
-        var tableData = '<table id="newLeadTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
+        var tableData = '<table id="newLeadTableReport" class="table table-striped table-bordered table-responsive">'+
         '<thead>' +
         '<tr>' +   
             '<th>School Name</th>' +                  
@@ -121,7 +121,8 @@ function newLeadSuccess(res)
 	}
 	else
 	{
-		$("#leadTableRows").html("Sorry, No Records found.");	
+        // $("#leadTableRows").html("Sorry, No Records found.");	
+        alert(res.Message);
 	}
 }
 });
