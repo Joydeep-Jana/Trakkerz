@@ -8,6 +8,9 @@ if(localStorage.getItem("Response"))
         hygieneLeadSuccess(JSON.parse(localStorage.getItem("Response")));       
     },1000); 
 }
+    gatherGroups();
+    $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+
 $(document).on("click", "#btnSubmit", function()
 {
     //console.log("Clicked");
@@ -47,22 +50,22 @@ $(document).on("click", "#btnSubmit", function()
     var dataString = createJSON(params, values);
 
     //alert(dataString);
-    ajaxCall(url, "POST", dataString, "application/json", hygieneLeadSuccess);      
+    ajaxCall(url, "POST", dataString, "application/json", hygieneLeadSuccess);		
 
 });
 function hygieneLeadSuccess(res)
 {
     console.log(res);
     if(!!res.IsOk === true)
-    {
+	{
         localStorage.setItem("Response",JSON.stringify(res));
         res = res.ResponseObject;
         var resp = JSON.stringify(res);
         localStorage.setItem("AllData", resp);
-        var html = '';
+		var html = '';
 
-        for(var i = 0; i < res.length; ++i)
-        {
+		for(var i = 0; i < res.length; ++i)
+		{
             var leadName = res[i].LeadName;
             var contactPerson = res[i].SchoolContactPerson;
             var contactNo = res[i].ContactNumber;
@@ -94,8 +97,8 @@ function hygieneLeadSuccess(res)
 
             html += '<div>' +
                     '<tr class="small">' + 
-                        '<td>' + leadName + '</td>' + 
-                        '<td>' + contactPerson + '</td>' + 
+						'<td>' + leadName + '</td>' + 
+						'<td>' + contactPerson + '</td>' + 
                         '<td>' + contactNo + '</td>' + 
                         '<td>' + state + '</td>' +
                         '<td>' + city + '</td>' + 
@@ -105,14 +108,14 @@ function hygieneLeadSuccess(res)
                         '<td>' + designation  + '</td>' + 
                         '<td>' + email  + '</td>' +
                         '<td><a href="#" class="text-primary" id=' + "viewHygieneTable_" + res[i].LeadId + '>'+
-                        'View more' +
+						'View more' +
                         '</a>'+ 
                         '</td>'+
                     '</tr>' +
                     '</div>';
-        }
+		}
 
-        var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive">'+
+        var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
         '<thead>'+
             '<tr>'+
                 '<th>School Name</th>'+
@@ -130,17 +133,16 @@ function hygieneLeadSuccess(res)
         '</thead>' +
         '<tbody id="hygieneTableRows">' +
         '</tbody>' +
-        '</tbody>' +
         '</table>';
         $(".hygieneTableForLead").html(tableData);
         $("#hygieneTableRows").html(html);
-        table = $('#hygieneTableReport').DataTable(); 
-    }
-    else
-    {
+        table = $('#hygieneTableReport').DataTable();
+	}
+	else
+	{
         alert("Sorry, No Records found.");
-        table.clear().draw();   
-    }
+        table.clear().draw();	
+	}
 }
 });
 $(document).on("click", "[id^='viewHygieneTable_']", function()
@@ -152,5 +154,51 @@ $(document).on("click", "[id^='viewHygieneTable_']", function()
     // localStorage.setItem("FromDate", fromDate);
     // localStorage.setItem("ToDate", toDate);
     //alert(localStorage.getItem("IdForView"));
-    window.location.href = "./hygieneTableView.html";
+	window.location.href = "./hygieneTableView.html";
 });
+function gatherGroups()
+{
+    var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
+    var dataString = {"OrganizationId":1};
+    dataString = JSON.stringify(dataString);
+    ajaxCall(url, "POST", dataString, "application/json", function(res)
+    {
+        console.log(res);
+        var data = res.ResponseObject;
+        html = "<option value=0 >Select Group</option>";
+        for(var index=0; index<data.length; index++)
+        {
+            var name = data[index].GroupName;
+            if(name.length>30)
+            {
+                console.log("hit");
+                name = name.substring(0, 30) + "...";
+                console.log(name);
+            }
+            html += "<option value='" + data[index].GroupId + "'>" + name + "</option>";
+        }
+        $("#formControlSelectGroup").html(html);
+    });
+}
+
+function groupChanged()
+{
+    if(this.value != "" && this.value != "Select Group")
+    {
+        var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
+        var dataString = "{'GroupId':" + this.value + "}";
+        ajaxCall(url, "POST", dataString, "application/json", function(res){
+            var data = res.ResponseObject;
+            var html = "<option>Select Person</option>";
+            for(var index=0; index<data.length; index++)
+            {
+                html += "<option value='" + data[index].PersonId + "'>" + data[index].FirstName + " " + data[index].LastName + "</option>";
+            }
+            $("#formControlSelectPerson").html(html);
+        });
+    }
+    else
+    {
+        alert("Please Select a valid Group.");
+    }
+}
