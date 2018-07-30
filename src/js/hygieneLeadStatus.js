@@ -115,7 +115,7 @@ function hygieneLeadSuccess(res)
                     '</div>';
 		}
 
-        var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
+        var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive">'+
         '<thead>'+
             '<tr>'+
                 '<th>School Name</th>'+
