@@ -136,10 +136,7 @@ function hygieneLeadSuccess(res)
         '</table>';
         $(".hygieneTableForLead").html(tableData);
         $("#hygieneTableRows").html(html);
-		table = $('#hygieneTableReport').dataTable({
-            destroy:true,
-            data:tableData
-        });; 
+        table = $('#hygieneTableReport').DataTable();
 	}
 	else
 	{
