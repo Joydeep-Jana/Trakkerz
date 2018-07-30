@@ -105,7 +105,10 @@ $(document).ready(function()
             console.log(tableHTML);
             $(".verifiedTableForLead").html(tableHTML);
             $("#leadTableRows").html(html);
-            $('#leadTableReport').DataTable(); 
+            $('#leadTableReport').DataTable({
+                destroy:true,
+                data:tableData
+            }); 
         }
         else
         {
