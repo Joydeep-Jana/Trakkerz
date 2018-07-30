@@ -29,10 +29,10 @@ $(document).ready(function()
             return false;
         }
 
-        if(person == "")
-            person=8856;
-        if(group == "")
-            group=7598;
+        // if(person == "")
+        //     person=8856;
+        // if(group == "")
+        //     group=7598;
 
         var url = "http://Management.trakkerz.com/api/Reports/ConvertedLeadsStatus";
         var params = ["FromDate", "ToDate", "PersonId", "GroupId"];

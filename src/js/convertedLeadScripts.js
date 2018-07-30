@@ -25,6 +25,11 @@ function submited()
         alert("Please select To date");
         return;
     }
+    if(toDate < fromDate)
+    {
+        alert("From date should be before To date!");
+        return false;
+    }
     if(group == 0)
     {
         // alert("Please select a group");
@@ -38,7 +43,7 @@ function submited()
         personId = null;
     }
     var params = ["FromDate","ToDate", "PersonId", "GroupId"];
-    var values = [fromDate,toDate, group, personId];
+    var values = [fromDate,toDate,personId, group];
     var dataString = createJSON(params,values);
     ajaxCall(url, "POST", dataString, "application/json", submitedResponse);
 }

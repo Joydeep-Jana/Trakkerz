@@ -34,14 +34,19 @@ $(document).on("click", "#btnSubmit", function()
         alert("From date should be before To date!");
         return false;
     }
+    if(toDate < fromDate)
+    {
+        alert("From date should be before To date!");
+        return false;
+    }
     localStorage.setItem("FromDate", fromDate);
     localStorage.setItem("ToDate", toDate);
     
 
-    if(person == "")
-        person=8856;
-    if(group == "")
-        group=7598;
+    // if(person == "")
+    //     person=8856;
+    // if(group == "")
+    //     group=7598;
 
     var url = "http://Management.trakkerz.com/api/Reports/HygieneCheckForLeads";
     var params = ["FromDate", "ToDate", "PersonId", "GroupId"];

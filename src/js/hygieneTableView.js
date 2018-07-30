@@ -325,6 +325,6 @@ function ViewHygieneTable()
 }
 $(document).on('click', "#btnViewBack", function()
 {
-    window.location.href = "/hygieneLeadReport.html";
+    window.location.href = "./hygieneLeadReport.html";
     
 });

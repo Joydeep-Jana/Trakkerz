@@ -28,10 +28,10 @@ $(document).on("click", "#btnSubmit", function()
         return false;
     }
 
-    if(person == "")
-        person=8856;
-    if(group == "")
-        group=7598;
+    // if(person == "")
+    //     person=null;
+    // if(group == "")
+    //     group=7609;
 
     var url = "http://Management.trakkerz.com/api/Reports/ConvertedLeadsStatus";
     var params = ["FromDate", "ToDate", "PersonId", "GroupId"];
@@ -40,31 +40,31 @@ $(document).on("click", "#btnSubmit", function()
     var dataString = createJSON(params, values);
 
     //alert(dataString);
-    ajaxCall(url, "POST", dataString, "application/json", verifiedLeadSuccess);		
+    ajaxCall(url, "POST", dataString, "application/json", verifiedLeadSuccess);     
 
 });
 function verifiedLeadSuccess(res)
 {
     console.log(res);
     if(!!res.IsOk === true)
-	{
-		res = res.ResponseObject;
-		var html = '';
+    {
+        res = res.ResponseObject;
+        var html = '';
 
-		for(var i = 0; i < res.length; ++i)
-		{
-			var contactNo = res[i].ContactNumber;
-			var executiveName = res[i].ExceutiveName;
-			var leadAddress = res[i].LeadAddress;
-			var leadId = res[i].LeadId;
-			var leadName = res[i].LeadName;
-			var contactPerson = res[i].SchoolContactPerson;
-			var schoolSetup = res[i].SchoolSetup;
+        for(var i = 0; i < res.length; ++i)
+        {
+            var contactNo = res[i].ContactNumber;
+            var executiveName = res[i].ExceutiveName;
+            var leadAddress = res[i].LeadAddress;
+            var leadId = res[i].LeadId;
+            var leadName = res[i].LeadName;
+            var contactPerson = res[i].SchoolContactPerson;
+            var schoolSetup = res[i].SchoolSetup;
             var city = res[i].City;
             var state = res[i].State;
             var services = res[i].LeadServicesList;
             //var voiceSms,voiceCall,flexInstallation,adminTraining,teacherTraining,parentTraining,studentTraining,other;
-            var person = {voiceSms:0, voiceCall:0, flexInstallation:0,adminTraining:0,teacherTraining:0,parentTraining:0,studentTraining:0,other:0};
+            var person = {collections:0, voiceCall:0, flexInstallation:0,adminTraining:0,teacherTraining:0,parentTraining:0,studentTraining:0,other:0};
             for(var serviceIndex=0; serviceIndex<services.length; serviceIndex ++)
             {
                 var details=services[serviceIndex]["ServiceName"];
@@ -74,8 +74,8 @@ function verifiedLeadSuccess(res)
                     case "Voice Call": 
                                 person.voiceCall=1;
                                 break;
-                    case "Voice SMS": 
-                                person.voiceSms=1;
+                    case "Collections": 
+                                person.collections=1;
                                 break;
                     case "Parent Training": 
                                 person.parentTraining=1;
@@ -97,7 +97,7 @@ function verifiedLeadSuccess(res)
                                 break;
                 }
             }
-            var setupStatusIcon,voiceCallIcon,voiceSmsIcon,parentTrainingIcon,teacherTrainingIcon,adminTrainingIcon,studentTrainingIcon,flexIcon,otherIcon;
+            var setupStatusIcon,voiceCallIcon,collectionsIcon,parentTrainingIcon,teacherTrainingIcon,adminTrainingIcon,studentTrainingIcon,flexIcon,otherIcon;
             if(!schoolSetup)
             {
                 setupStatusIcon = "fa-remove text-danger"
@@ -116,13 +116,13 @@ function verifiedLeadSuccess(res)
                 voiceCallIcon = "fa-check text-success";
             }
 
-            if(!person.voiceSms)
+            if(!person.collections)
             {
-                voiceSmsIcon = "fa-remove text-danger"
+                collectionsIcon = "fa-remove text-danger"
             }
             else
             {
-                voiceSmsIcon = "fa-check text-success";
+                collectionsIcon = "fa-check text-success";
             }
 
             if(!person.parentTraining)
@@ -189,14 +189,13 @@ function verifiedLeadSuccess(res)
                         '<td>' + executiveName  + '</td>' +
                         '<td class="text-center"><i class="fa ' + setupStatusIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + voiceCallIcon + ' fa-2x"</td>' + 
-                        '<td class="text-center"><i class="fa ' + voiceSmsIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + flexIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + adminTrainingIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + teacherTrainingIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + parentTrainingIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + studentTrainingIcon + ' fa-2x"</td>' +
                         '<td class="text-center"><i class="fa ' + otherIcon + ' fa-2x"</td>' +
-                          
+                        '<td class="text-center"><i class="fa ' + collectionsIcon + ' fa-2x"</td>' +  
                     '</tr>' +
                     '</div>';
         }
@@ -212,13 +211,13 @@ function verifiedLeadSuccess(res)
                 '<th>Executive</th>'+
                 '<th>School Setup</th>'+
                 '<th>Voice Call</th>'+
-                '<th>Voice SMS</th>'+
                 '<th>Flex Installation</th>'+
                 '<th>Admin Training</th>'+
                 '<th>Teacher Training</th>'+
                 '<th>Parent Training</th>'+
                 '<th>Student Training</th>'+
                 '<th>Others</th>'+
+                '<th>Collection</th>'+
             '</tr>'+
         '</thead>'+
         '<tbody id="statusTableRows">' +
@@ -226,13 +225,13 @@ function verifiedLeadSuccess(res)
         '</table>';
         $(".statusTableForLead").html(tableHtml);
 
-		$("#statusTableRows").html(html);
-		$('#statusTableReport').DataTable(); 
-	}
-	else
-	{
-		$("#statusTableRows").html("Sorry, No Records found.");	
-	}
+        $("#statusTableRows").html(html);
+        $('#statusTableReport').DataTable(); 
+    }
+    else
+    {
+        $("#statusTableRows").html("Sorry, No Records found."); 
+    }
 }
 });
 function gatherGroups()

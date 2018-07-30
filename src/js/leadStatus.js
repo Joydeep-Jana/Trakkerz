@@ -65,6 +65,11 @@ function submited()
         alert("Please select a date");
         return;
     }
+    if(toDate < fromDate)
+    {
+        alert("From date should be before To date!");
+        return false;
+    }
     if(group == 0)
     {
         alert("Please select a group");
