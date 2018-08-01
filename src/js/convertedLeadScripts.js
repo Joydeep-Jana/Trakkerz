@@ -2,11 +2,31 @@ w3.includeHTML();
 
 $(document).ready(function()
 {
+    var date= new Date;
+    console.log(date);
+    console.log(date.getDate());
     gatherGroups();
     $("#col2").on("click", "#btnSubmit", submited);
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    /*TZ-519 Aishwarya added this code to download csv */
+    $("#col2").on("click", "#btnDownload", function()
+	{
+		var data = localStorage.getItem("ExcelDownloadForConvertedLead");
+        
+		JSONToCSVConvertor(data, "ExcelDownloadForConvertedLead", true);
+    });
     $("#convertedLeadTable").dataTable();
 });
+function _convertDate(str)
+{
+    var date = new Date(str);
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	var dd = date.getDate();
+	var mm = months[date.getMonth()];
+    var yyyy = date.getFullYear();
+    
+	return dd + "/" + mm + "/" + yyyy;
+}
 
 function submited()
 {
@@ -25,11 +45,6 @@ function submited()
         alert("Please select To date");
         return;
     }
-    if(toDate < fromDate)
-    {
-        alert("From date should be before To date!");
-        return false;
-    }
     if(group == 0)
     {
         // alert("Please select a group");
@@ -43,20 +58,18 @@ function submited()
         personId = null;
     }
     var params = ["FromDate","ToDate", "PersonId", "GroupId"];
-    var values = [fromDate,toDate,personId, group];
+    var values = [fromDate,toDate, group, personId];
     var dataString = createJSON(params,values);
     ajaxCall(url, "POST", dataString, "application/json", submitedResponse);
 }
 function submitedResponse(res)
 {
-    console.log(res);
-    // console.log(res.IsOk);
     if(res.IsOk)
     {
         var dataArray = new Array();
         var mainData = res.ResponseObject;
-        console.log(res);
-        // console.log(data);
+        /*TZ-519 Aishwarya added this code to download csv */
+        var excelDownload=[];
         for(var index=0; index<mainData.length; index++)
         {
             var temp = new Array();
@@ -65,14 +78,30 @@ function submitedResponse(res)
             temp.push(mainData[index].LeadName);
             temp.push(mainData[index].ContactNumber);
             temp.push(mainData[index].NextAppointmentDate);
+            /*TZ-519 Aishwarya added this code to download csv */
+            var nextDate = mainData[index].NextAppointmentDate;
+            if(nextDate!="")
+                nextDate= _convertDate(nextDate);
             temp.push(mainData[index].SchoolContactPerson);
             temp.push(mainData[index].State);
             temp.push(mainData[index].City);
             temp.push(mainData[index].Address);
             temp.push(mainData[index].Remarks);
             dataArray.push(temp);
+            /*TZ-519 Aishwarya added this code to download csv */
+            var innerDetails = {};
+            innerDetails["School_Id"] = mainData[index].LeadId;
+            innerDetails["Lead_creator"] = mainData[index].LeadCreator;
+            innerDetails["School_name"] = mainData[index].LeadName;
+            innerDetails["Contact_no"] = mainData[index].ContactNumber;
+            innerDetails["Next_appointment_date"] = nextDate;
+            innerDetails["School_contact_person"] = mainData[index].SchoolContactPerson;
+            innerDetails["State"] = mainData[index].State;
+            innerDetails["City"] = mainData[index].City;
+            innerDetails["Address"] = mainData[index].Address;
+            innerDetails["Remarks"] = mainData[index].Remarks;
+            excelDownload[excelDownload.length]=innerDetails;
         }
-        console.log(dataArray);
         var tableHtml = '<table id="convertedLeadTable" class="table table-striped table-bordered">'+
         '<thead>'+
             '<tr>'+
@@ -91,6 +120,9 @@ function submitedResponse(res)
         '<tbody>'+
         '</body>'+
         '</table>';
+        /*TZ-519 Aishwarya added this code to download csv */
+        var downloadButton = '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';  
+        $("#downloadExcel").html(downloadButton);
         $(".tableForLead").html(tableHtml);
         $("#convertedLeadTable").dataTable(
             {
@@ -98,6 +130,9 @@ function submitedResponse(res)
                 data:dataArray
             }
         );
+        /*TZ-519 Aishwarya added this code to download csv */
+        localStorage.setItem("ExcelDownloadForConvertedLead",JSON.stringify(excelDownload));
+            
     }
     else
     {
@@ -133,7 +168,6 @@ function groupChanged()
         var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
-            // console.log(res);
             var data = res.ResponseObject;
             var html = "<option>Select Person</option>";
             for(var index=0; index<data.length; index++)

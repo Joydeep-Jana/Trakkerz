@@ -3,8 +3,26 @@ $(document).ready(function(){
     gatherGroups();
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
     $("#col2").on("click", "#btnSubmit", submited);
-
+    /*TZ-519 Aishwarya added this code to download csv */
+    $("#col2").on("click", "#btnDownload", function()
+	{
+		var data = localStorage.getItem("ExcelDownloadForLeadStatus");
+        
+		JSONToCSVConvertor(data, "ExcelDownloadForLeadStatus", true);
+    });
+    $("#convertedLeadTable").dataTable();
+    
 });
+function _convertDate(str)
+{
+    var date = new Date(str);
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	var dd = date.getDate();
+	var mm = months[date.getMonth()];
+    var yyyy = date.getFullYear();
+    
+	return dd + "/" + mm + "/" + yyyy;
+}
 function gatherGroups()
 {
     var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
@@ -33,7 +51,6 @@ function groupChanged()
         var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
-            // console.log(res);
             var data = res.ResponseObject;
             var html = "<option>Select Person</option>";
             for(var index=0; index<data.length; index++)
@@ -65,21 +82,16 @@ function submited()
         alert("Please select a date");
         return;
     }
-    if(toDate < fromDate)
-    {
-        alert("From date should be before To date!");
-        return false;
-    }
-    if(group == 0)
-    {
-        alert("Please select a group");
-        return;
-    }
-    if(personId == 0)
-    {
-        alert("Please select a person");
-        return;
-    }
+    // if(group == 0)
+    // {
+    //     alert("Please select a group");
+    //     return;
+    // }
+    // if(personId == 0)
+    // {
+    //     alert("Please select a person");
+    //     return;
+    // }
     
     var params = ["FromDate","Todate", "GroupId", "PersonId"];
     // var values = ['2018-01-01', "2018-05-01", 7598, 8856];
@@ -90,7 +102,8 @@ function submited()
 
 function submitedResponse(res)
 {
-    console.log(res);
+    /*TZ-519 Aishwarya added this code to download csv */
+    var excelDownload=[];
     if(res.IsOk)
     {
         var responseData = res.ResponseObject;
@@ -109,49 +122,69 @@ function submitedResponse(res)
             switch(status)
             {
                 case 'D':
-                    status = "Done";
-                    break;
+                status = "Done";
+                break;
                 case 'N':
-                    status = "Not Done";
-                    break;
+                status = "Not Done";
+                break;
                 case 'S':
-                    status = "Suspecting";
-                    break;
+                status = "Suspecting";
+                break;
                 case 'P':
-                    status = "Prospecting";
-                    break;
+                status = "Prospecting";
+                break;
                 case 'E':
-                    status = "Expecting";
-                    break;
+                status = "Expecting";
+                break;
             }
             row.push(status);
             row.push(rawData.LastVisited);
             row.push(rawData.Remarks);
             tableData.push(row);    
+            /*TZ-519 Aishwarya added this code to download csv */
+            var innerDetails = {};
+            
+            innerDetails["School_name"] = rawData.LeadName;
+            innerDetails["Contact_person"] = rawData.SchoolContactPerson;
+            innerDetails["Contact_no"] = rawData.ContactNumber;
+            innerDetails["State"] = rawData.State;
+            innerDetails["City"] = rawData.City;
+            innerDetails["Executive_name"] = rawData.LeadCreator;
+            innerDetails["Status"] = rawData.status;
+            var nextDate = rawData.LastVisited;
+            if(nextDate!="")
+                nextDate= _convertDate(nextDate);
+            innerDetails["Last_visit_date"] = nextDate;
+            innerDetails["Feedback"] = rawData.Remarks;
+            excelDownload[excelDownload.length]=innerDetails;
         }
-        console.log(tableData);
         var tableHtml = '<table id="leadStatusTable" class="table table-striped table-bordered">'+
         '<thead>'+
-            '<tr>'+
-                '<th>School Name</th>'+
-                '<th>Contact Person</th>'+
-                '<th>contact no</th>'+
-                '<th>state</th>'+
-                '<th>city</th>'+
-                '<th>Executive</th>'+
-                '<th>Lead Status</th>'+
-                '<th>Last Visit Date</th>'+
-                '<th>Feedback</th>'+
-            '</tr>'+
+        '<tr>'+
+        '<th>School Name</th>'+
+        '<th>Contact Person</th>'+
+        '<th>contact no</th>'+
+        '<th>state</th>'+
+        '<th>city</th>'+
+        '<th>Executive</th>'+
+        '<th>Lead Status</th>'+
+        '<th>Last Visit Date</th>'+
+        '<th>Feedback</th>'+
+        '</tr>'+
         '</thead>'+
         '<tbody>'+
         '</tbody>'+
-    '</table>';
+        '</table>';
+        /*TZ-519 Aishwarya added this code to download csv */
+        var downloadButton = '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';  
+        $("#downloadExcel").html(downloadButton);
         $(".tableForLead").html(tableHtml);
         $("#leadStatusTable").dataTable({
             destroy:true,
             data:tableData
         });
+        /*TZ-519 Aishwarya added this code to download csv */
+        localStorage.setItem("ExcelDownloadForLeadStatus",JSON.stringify(excelDownload));
     }
     else{
         alert(res.Message);

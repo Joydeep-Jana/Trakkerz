@@ -3,10 +3,16 @@ $(document).ready(function()
 {
     gatherGroups();
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    /*TZ-519 Aishwarya added this code to download csv */
+    $("#col2").on("click", "#btnDownload", function()
+	{
+		var data = localStorage.getItem("ExcelDownloadForNewLead");
+
+		JSONToCSVConvertor(data, "ExcelDownloadForNewLead", true);
+	});
 
 $(document).on("click", "#btnSubmit", function()
 {
-    //console.log("Clicked");
     var fromDate = $("#selFromDate").val();
     var toDate = $("#selToDate").val();
     var person = $("#formControlSelectPerson").val();
@@ -45,11 +51,11 @@ $(document).on("click", "#btnSubmit", function()
 });
 function newLeadSuccess(res)
 {
-    console.log(res);
-    if(res.IsOk)
+    if(!!res.IsOk === true)
 	{
 		res = res.ResponseObject;
-		var html = '';
+        var html = '';
+        var excelDownload=[];
 
 		for(var i = 0; i < res.length; ++i)
 		{
@@ -82,6 +88,18 @@ function newLeadSuccess(res)
                     spendStatus="Done";
                     break;
             }
+            /*TZ-519 Aishwarya added this code to download csv */
+            var innerDetails = {};
+                innerDetails["School_Name"] = leadName;
+                innerDetails["Contact_Person"] = contactPerson;
+                innerDetails["Contact_no"] = contactNo;
+                innerDetails["State"] = state;
+				innerDetails["City"] = city;
+                innerDetails["Lead_creator"] = leadCreator;
+                innerDetails["Status"] = spendStatus;
+				innerDetails["Next_appointment_date"] = nextAppointment;
+                innerDetails["Remarks"] = remarks;
+				excelDownload[excelDownload.length]=innerDetails;
 
             html += '<div>' +
                     '<tr class="small">' + 
@@ -114,15 +132,20 @@ function newLeadSuccess(res)
         '<tbody id="newLeadTableRows">' +
         '</tbody>' +
         '</table>';
+        /*TZ-519 Aishwarya added this code to download csv */
+        var downloadButton = //'<div class="col-md-3">' +
+			                        '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';
+		                         //'</div>';
         $(".newTableForLead").html(tableData);
-
+        /*TZ-519 Aishwarya added this code to download csv */
+        $("#downloadExcel").html(downloadButton);
 		$("#newLeadTableRows").html(html);
-		$('#newLeadTableReport').DataTable(); 
+        $('#newLeadTableReport').DataTable(); 
+        localStorage.setItem("ExcelDownloadForNewLead",JSON.stringify(excelDownload));
 	}
 	else
 	{
-        // $("#leadTableRows").html("Sorry, No Records found.");	
-        alert(res.Message);
+		$("#leadTableRows").html("Sorry, No Records found.");	
 	}
 }
 });
@@ -133,7 +156,6 @@ function gatherGroups()
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
     {
-        console.log(res);
         var data = res.ResponseObject;
         html = "<option value=0 >Select Group</option>";
         for(var index=0; index<data.length; index++)
@@ -141,9 +163,7 @@ function gatherGroups()
             var name = data[index].GroupName;
             if(name.length>30)
             {
-                console.log("hit");
                 name = name.substring(0, 30) + "...";
-                console.log(name);
             }
             html += "<option value='" + data[index].GroupId + "'>" + name + "</option>";
         }
