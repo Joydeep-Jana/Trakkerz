@@ -4,10 +4,16 @@ $(document).ready(function()
     $('#leadTableReport').DataTable();
     gatherGroups();
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    /*TZ-519 Aishwarya added this code to download csv */
+    $("#col2").on("click", "#btnDownload", function()
+	{
+		var data = localStorage.getItem("ExcelDownloadForVerifiedLead");
+
+		JSONToCSVConvertor(data, "ExcelDownloadForVerifiedLead", true);
+	});
 
     $(document).on("click", "#btnSubmit", function()
     {
-        //console.log("Clicked");
         var fromDate = $("#selFromDate").val();
         var toDate = $("#selToDate").val();
         var person = $("#formControlSelectPerson").val();
@@ -29,10 +35,10 @@ $(document).ready(function()
             return false;
         }
 
-        // if(person == "")
-        //     person=8856;
-        // if(group == "")
-        //     group=7598;
+        if(person == "")
+            person=8856;
+        if(group == "")
+            group=7598;
 
         var url = "http://Management.trakkerz.com/api/Reports/ConvertedLeadsStatus";
         var params = ["FromDate", "ToDate", "PersonId", "GroupId"];
@@ -46,11 +52,12 @@ $(document).ready(function()
     });
     function verifiedLeadSuccess(res)
     {
-        console.log(res);
         if(res.IsOk)
         {
             res = res.ResponseObject;
             var html = '';
+            /*TZ-519 Aishwarya added this code to download csv */
+            var excelDownload=[];
 
             for(var i = 0; i < res.length; ++i)
             {
@@ -63,6 +70,20 @@ $(document).ready(function()
                 var schoolSetup = res[i].SchoolSetup;
                 var city = res[i].City;
                 var state = res[i].State;
+                var innerDetails = {};
+				innerDetails["School_Name"] = leadName;
+				innerDetails["School_Address"] = leadAddress;
+				innerDetails["Contact_Person"] = contactPerson;
+                innerDetails["Contact_no"] = contactNo;
+                if(schoolSetup)
+                    schoolSetup="Yes";
+                else
+                    schoolSetup="No";
+                innerDetails["School_Setup"] = schoolSetup;
+                innerDetails["City"] = city;
+				innerDetails["State"] = state;
+                innerDetails["Executive_name"] = executiveName;
+				excelDownload[excelDownload.length]=innerDetails;
                 var setupStatusImg = "";
                 if(schoolSetup)
                 {
@@ -86,6 +107,10 @@ $(document).ready(function()
                         '</tr>' +
                         '</div>';
             }
+            /*TZ-519 Aishwarya added this code to download csv */
+            var downloadButton = //'<div class="col-md-3">' +
+			                        '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';
+		                         //'</div>';
             var tableHTML = '<table id="leadTableReport" class="table table-striped table-bordered table-responsive" font-size:14px;>'+
             '<thead>'+
                 '<tr>'+
@@ -102,13 +127,12 @@ $(document).ready(function()
             '<tbody id="leadTableRows">'+
             '</tbody>'+
             '</table>';
-            console.log(tableHTML);
+            /*TZ-519 Aishwarya added this code to download csv */
+            localStorage.setItem("ExcelDownloadForVerifiedLead",JSON.stringify(excelDownload));
             $(".verifiedTableForLead").html(tableHTML);
+            $("#downloadExcel").html(downloadButton);
             $("#leadTableRows").html(html);
-            $('#leadTableReport').DataTable({
-                destroy:true,
-                data:tableData
-            }); 
+            $('#leadTableReport').DataTable(); 
         }
         else
         {
@@ -124,7 +148,6 @@ function gatherGroups()
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
     {
-        console.log(res);
         var data = res.ResponseObject;
         html = "<option value=0 >Select Group</option>";
         for(var index=0; index<data.length; index++)
@@ -132,9 +155,7 @@ function gatherGroups()
             var name = data[index].GroupName;
             if(name.length>30)
             {
-                console.log("hit");
                 name = name.substring(0, 30) + "...";
-                console.log(name);
             }
             html += "<option value='" + data[index].GroupId + "'>" + name + "</option>";
         }
