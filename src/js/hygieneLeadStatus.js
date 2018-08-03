@@ -202,7 +202,7 @@ $(document).ready(function()
             var downloadButton = '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';
             
             
-            var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
+            var tableData = '<table id="hygieneTableReport" class="table table-striped table-bordered table-responsive">'+
             '<thead>'+
             '<tr>'+
             '<th>School Name</th>'+

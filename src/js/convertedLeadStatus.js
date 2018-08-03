@@ -315,7 +315,7 @@ $(document).ready(function()
             $(".statusTableForLead").html(tableHtml);
             
             $("#statusTableRows").html(html);
-            $('#statusTableReport').DataTable(); 
+            $('#leadStatusTable').DataTable(); 
         }
         else
         {
