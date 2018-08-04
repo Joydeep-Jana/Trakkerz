@@ -1,25 +1,26 @@
+<!-- TZ-509 Aishwarya added Report for Hygiene Check Report for Activities -->
 <div class="bg-white px-2 py-3">
 	<div class="row no-gutters mb-3">
 		<div class="col-md-12 col-sm-12 col-12 px-3 border-bottom h5">
-			New Lead Report
+			Hygiene Check Report for Activities
 		</div>
 	</div>
-
+    
 	<div class="row no-gutters px-3">
 		<div class="col-md-5 col-sm-5 col-12">
 			<div class="form-group">
-				<label for="selFromDate">From Date <span class="text-danger">*</span></label>
-				<input type="text" id="selFromDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select From Date" value="">
+				<label for="lblFromDate">From Date <span class="text-danger">*</span></label>
+				<input type="text" id="txtFromDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select From Date" value="">
 			</div>
 		</div>
 		<div class="col-md-5 col-sm-5 col-12 offset-md-2 offset-sm-2">
 			<div class="form-group">
-				<label for="selToDate">To Date <span class="text-danger">*</span></label>
-				<input type="text" id="selToDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select To Date" value="">
+				<label for="lblToDate">To Date <span class="text-danger">*</span></label>
+				<input type="text" id="txtToDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select To Date" value="">
 			</div>
 		</div>
 	</div>
-
+    
 	<div class="row no-gutters px-3">
 		<div class="col-md-5 col-sm-5 col-12">
 			<div class="form-group">
@@ -37,21 +38,27 @@
 				</select>
 			</div>
 		</div>
-	</div>
+    </div>
+    <div class="row no-gutters px-3">
+        <div class="col-md-5 col-sm-5 col-12">
+            <div class="form-group">
+                <label for="lblLeadId">School ID</label>
+                <input type="text" id="txtLeadId" class="form-control rounded-0">
+            </div>
+        </div>
+    </div>
 	<!-- TZ-519 Aishwarya added this code to download csv  -->
 	<div class="row no-gutters px-3">
 		<div class="col-md-9 col-sm-10 col-10">
 			<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnSubmit" >Submit</button>
 		</div>
 		<div id = "downloadExcel"class="col-md-3">
-			<!-- <button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button> -->
 		</div>
 	</div>
 </div>
 
 <div class="bg-white px-2 py-3 mt-2">
-    <div class="newTableForLead">
-        <!-- <table id="newLeadTableReport" class="table table-striped table-bordered table-responsive" style="width:100%"> -->
-			<h6 class="border-bottom text-muted">Your Result will be shown here.</h6>
+    <div class="hygieneActivityForLead">
+        <h6 class="border-bottom text-muted">Your Result will be shown here.</h6>
     </div>
 </div>

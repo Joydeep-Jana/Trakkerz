@@ -1,0 +1,56 @@
+<!-- TZ-511 Aishwarya added Reports for Status of Expected Leads -->
+<div class="bg-white px-2 py-3">
+	<div class="row no-gutters mb-3">
+		<div class="col-md-12 col-sm-12 col-12 px-3 border-bottom h5">
+			Status of Expected Leads
+		</div>
+	</div>
+
+	<div class="row no-gutters px-3">
+		<div class="col-md-5 col-sm-5 col-12">
+			<div class="form-group">
+				<label for="lblFromDate">From Date <span class="text-danger">*</span></label>
+				<input type="text" id="txtFromDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select From Date" value="">
+			</div>
+		</div>
+		<div class="col-md-5 col-sm-5 col-12 offset-md-2 offset-sm-2">
+			<div class="form-group">
+				<label for="lblToDate">To Date <span class="text-danger">*</span></label>
+				<input type="text" id="txtToDate" class="form-control rounded-0" data-date-today-highlight="true" data-provide="datepicker" placeholder="Select To Date" value="">
+			</div>
+		</div>
+	</div>
+
+	<div class="row no-gutters px-3">
+			<div class="col-md-5 col-sm-5 col-12">
+				<div class="form-group">
+					<label for="formControlSelectPerson">Select Group</label>
+					<select class="form-control rounded-0" id="formControlSelectGroup">
+						<option value=0>Select Group</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-5 col-sm-5 col-12 offset-md-2 offset-sm-2">
+				<div class="form-group">
+					<label for="formControlSelectGroup">Select Person</label>
+					<select class="form-control rounded-0" id="formControlSelectPerson">
+						<option>Select Person</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<!-- TZ-519 Aishwarya added this code to download csv  -->
+		<div class="row no-gutters px-3">
+			<div class="col-md-9 col-sm-10 col-10">
+				<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnSubmit" >Submit</button>
+			</div>
+			<div id = "downloadExcel"class="col-md-3">
+			</div>
+		</div>
+</div>
+
+<div class="bg-white px-2 py-3 mt-2">
+    <div class="expectedActivityForLead">	
+		<h6 class="border-bottom text-muted">Your Result will be shown here.</h6>
+    </div>
+</div>

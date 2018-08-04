@@ -55,6 +55,8 @@ function groupChanged()
 }
 $(document).on("click", "#btnSubmit", function()
 {
+    var htmlLoader='<img src="src/img/loader.svg" alt="loader" width="80"/>';
+    $("#loaderForActivityResult").html(htmlLoader);
     var selDate = $("#selDate").val();
     var group  = $("#formControlSelectGroup").val();
     var person = $("#formControlSelectPerson").val();
@@ -85,6 +87,7 @@ function activitySuccess(res)
     if(res.IsOk)
 	{
         //console.log(res);
+        $("#loaderForActivityResult").hide();
         var person=localStorage.getItem("PersonId");
         //console.log(person);
         res = res.ResponseObject;

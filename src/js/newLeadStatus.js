@@ -145,6 +145,7 @@ function newLeadSuccess(res)
 	}
 	else
 	{
+        alert("Sorry, No Records found.");
 		$("#leadTableRows").html("Sorry, No Records found.");	
 	}
 }
