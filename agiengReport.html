@@ -1,0 +1,70 @@
+<!-- + TZ#507 06/08/2018 Aishwarya added Report for Ageing of Activities -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,900">
+    
+	<link rel="stylesheet" type="text/css" href="./src/css/styles.css" />
+	<link rel="icon" type="image/png" href="./src/img/trakkerzwhite.png" sizes="16x16">
+	
+	<title>Trakkerz</title>
+</head>
+<body>
+	<!-- Header Section Starts -->
+	<header id="header" class="mb-2 bg-white">
+		<div w3-include-html="./header.html">
+            
+		</div>
+		<div class="clearfix"></div>
+	</header>
+	<!-- Header Section Ends -->
+    
+	<div class="container-fluid">
+		<div class="row no-gutters">
+			<!-- Left Section Starts -->
+			<div class="col-md-2 col-sm-2 col-2 pr-2 d-none d-sm-block">
+				<div w3-include-html="./leftColumn.html" id="col1">
+					
+				</div>
+			</div>
+			<!-- Left Section Ends -->
+            
+			<!-- Middle Section Starts -->
+			<div class="col-md-8">
+				<div w3-include-html="./agiengReportComponent.html" id="col2">
+					
+				</div>
+			</div>
+			<!-- Middle Section Ends -->
+            
+			<!-- Right Section Starts -->
+			<div class="col-md-2 col-sm-2 col-2 pl-2 d-none d-sm-block">
+				<div w3-include-html="./recentsColumn.html" id="col3">
+                    
+				</div>
+			</div>
+			<!-- Right Section Starts -->
+		</div>
+	</div>
+    
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="https://www.w3schools.com/lib/w3.js" type="text/javascript"></script>
+	<script type="text/javascript" src="./src/js/agiengReport.js" type="text/javascript"></script>
+	<script type="text/javascript" src="./src/js/mainScript.js" type="text/javascript"></script>
+    
+</body>
+</html>
+<!-- -TZ#507 06/08/2018 Aishwarya added Report for Ageing of Activities -->
