@@ -4,6 +4,7 @@ $(document).ready(function()
 {
     gatherGroups();
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    $("#col2").on("change", "#formControlSelectPerson", generateLeads);
     $("#col2").on("click", "#btnDownload", function()
 	{
 		var data = localStorage.getItem("ExcelDownloadForHygieneActivityReport");
@@ -18,7 +19,7 @@ $(document).on("click", "#btnSubmit", function()
     var toDate = $("#txtToDate").val();
     var person = $("#formControlSelectPerson").val();
     var group  = $("#formControlSelectGroup").val();
-    var leadId = $("#txtLeadId").val();
+    var leadId = $("#formControlSelectSchool").val();
     
     if(fromDate == "")
     {
@@ -56,7 +57,8 @@ function hygieneActivitySuccess(res)
 {
     if(!!res.IsOk === true)
 	{
-		res = res.ResponseObject;
+        res = res.ResponseObject;
+        console.log(res);
         var html = '';
         var excelDownload=[];
         
@@ -76,10 +78,6 @@ function hygieneActivitySuccess(res)
             var purpose = res[i].Purpose;
             var referenceNumber= res[i].ReferenceNumber;
             var remarks = res[i].Remarks;
-            if(collectionImage= "")
-            collectionImage="True";
-            else
-            collectionImage="False";
             
             switch(spendStatus)
             {
@@ -99,38 +97,120 @@ function hygieneActivitySuccess(res)
                 spendStatus="Done";
                 break;
             }
+            var collectionImageIcon,activityIcon,purposeIcon,remarksIcon,amountIcon,clientVisitIcon,nextAppointmentDateIcon,methodIcon,referenceNumberIcon;
             var innerDetails = {};
             innerDetails["School_Name"] = leadName;
-            innerDetails["Activity"] = activity;
-            innerDetails["Purpose"] = purpose;
+            if(activity==" ")
+            {
+                activityIcon = "fa-remove text-danger";
+                innerDetails["Activity"] = "No";
+            }
+            else
+            {
+                activityIcon = "fa-check text-success";
+                innerDetails["Activity"] = "Yes";
+            }
+            if(purpose==" ")
+            {
+                innerDetails["Purpose"] = "No";
+                purposeIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Purpose"] = "Yes";
+                purposeIcon = "fa-check text-success";
+            }
             innerDetails["Activity_creator"] = activityCreator;
-            innerDetails["Remarks"] = remarks;
-            innerDetails["Next_appointment_date"] = nextAppointmentDate;
+            if(remarks==" ")
+            {
+                innerDetails["Remarks"] = "No";
+                remarksIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Remarks"] = "Yes";
+                remarksIcon = "fa-check text-success";
+            }
+            if(nextAppointmentDate==" ")
+            {
+                innerDetails["Next_appointment_date"] = "No";
+                nextAppointmentDateIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Next_appointment_date"] = "Yes";
+                nextAppointmentDateIcon = "fa-check text-success";
+            }
             innerDetails["Status"] = spendStatus;
             innerDetails["Activity_creation_date"] = activityCreationDate;
-            innerDetails["Method"] = method;
-            innerDetails["Reference_Number"] = referenceNumber;
-            innerDetails["Amount"] = amount;
-            innerDetails["Client_visit"] = clientVisit;
-            innerDetails["Collection_image"] = collectionImage;
-
+            if(method==" " || method=="")
+            {
+                innerDetails["Method"] = "No";
+                methodIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Method"] = "Yes";
+                methodIcon = "fa-check text-success";
+            }
+            if(referenceNumber==" " || referenceNumber=="")
+            {
+                innerDetails["Reference_Number"] = "No";
+                referenceNumberIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Reference_Number"] = "Yes";
+                referenceNumberIcon = "fa-check text-success";
+            }
+            if(amount==0 || amount==" ")
+            {
+                innerDetails["Amount"] = "No";
+                amountIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Amount"] = "Yes";
+                amountIcon = "fa-check text-success";
+            }
+            if(clientVisit==" " || clientVisit=="")
+            {
+                innerDetails["Client_visit"] = "No";
+                clientVisitIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Client_visit"] = "Yes";
+                clientVisitIcon = "fa-check text-success";
+            }
+            if(collectionImage==" " || collectionImage=="")
+            {
+                innerDetails["Collection_image"] = "No";
+                collectionImageIcon = "fa-remove text-danger";
+            }
+            else
+            {
+                innerDetails["Collection_image"] = "Yes";
+                collectionImageIcon = "fa-check text-success";
+            }
+            
             excelDownload[excelDownload.length]=innerDetails;
             
             html += '<div>' +
             '<tr>' + 
             '<td>' + leadName + '</td>' + 
-            '<td>' + activity + '</td>' +
-            '<td>' + purpose + '</td>' + 
+            '<td class="text-center"><i class="fa ' + activityIcon + ' fa-2x"</td>' + 
+            '<td class="text-center"><i class="fa ' + purposeIcon + ' fa-2x"</td>' + 
             '<td>' + activityCreator + '</td>' +
-            '<td>' + remarks + '</td>' +
-            '<td>' + nextAppointmentDate + '</td>' +
+            '<td class="text-center"><i class="fa ' + remarksIcon + ' fa-2x"</td>' + 
+            '<td class="text-center"><i class="fa ' + nextAppointmentDateIcon + ' fa-2x"</td>' + 
             '<td>' + spendStatus  + '</td>' + 
             '<td>' + activityCreationDate  + '</td>' + 
-            '<td>' + method  + '</td>' +   
-            '<td>' + referenceNumber + '</td>' +
-            '<td>' + amount  + '</td>' + 
-            '<td>' + clientVisit  + '</td>' + 
-            '<td>' + collectionImage  + '</td>' +  
+            '<td class="text-center"><i class="fa ' + methodIcon + ' fa-2x"</td>' +   
+            '<td class="text-center"><i class="fa ' + referenceNumberIcon + ' fa-2x"</td>' + 
+            '<td class="text-center"><i class="fa ' + amountIcon + ' fa-2x"</td>' + 
+            '<td class="text-center"><i class="fa ' + clientVisitIcon + ' fa-2x"</td>' +  
+            '<td class="text-center"><i class="fa ' + collectionImageIcon + ' fa-2x"</td>' +  
             '</tr>' +
             '</div>';
         }
@@ -196,7 +276,8 @@ function groupChanged()
     {
         var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
-        ajaxCall(url, "POST", dataString, "application/json", function(res){
+        ajaxCall(url, "POST", dataString, "application/json", function(res)
+        {
             var data = res.ResponseObject;
             var html = "<option>Select Person</option>";
             for(var index=0; index<data.length; index++)
@@ -209,5 +290,34 @@ function groupChanged()
     else
     {
         alert("Please Select a valid Group.");
+    }
+}
+function generateLeads()
+{
+    if(this.value != "" && this.value != "Select Group")
+    {
+        var url = "https://management.trakkerz.com/api/Reports/NewActivities";
+        var fromDate = $("#txtFromDate").val();
+        var toDate = $("#txtToDate").val();
+        var person = $("#formControlSelectPerson").val();
+        var group  = $("#formControlSelectGroup").val();
+        var params = ["FromDate", "ToDate", "PersonId", "GroupId"];
+        var values = [fromDate, toDate, person, group];
+        var dataString = createJSON(params, values);
+
+        ajaxCall(url, "POST", dataString, "application/json", function(res)
+        {
+            var data = res.ResponseObject;
+            var html = "<option>Select School</option>";
+            for(var index=0; index<data.length; index++)
+            {
+                html += "<option value='" + data[index].LeadId + "'>" + data[index].LeadName + " </option>";
+            }
+            $("#formControlSelectSchool").html(html);
+        });
+    }
+    else
+    {
+        alert("Please Select a valid Person.");
     }
 }

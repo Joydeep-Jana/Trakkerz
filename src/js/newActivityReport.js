@@ -4,6 +4,7 @@ $(document).ready(function()
 {
     gatherGroups();
     $("#col2").on("change", "#formControlSelectGroup", groupChanged);
+    $("#col2").on("change", "#formControlSelectPerson", generateLeads);
     $("#col2").on("click", "#btnDownload", function()
 	{
 		var data = localStorage.getItem("ExcelDownloadForNewActivityReport");
@@ -194,5 +195,35 @@ function groupChanged()
     else
     {
         alert("Please Select a valid Group.");
+    }
+}
+function generateLeads()
+{
+    if(this.value != "" && this.value != "Select Group")
+    {
+        var url = "https://management.trakkerz.com/api/Reports/NewActivities";
+        var fromDate = $("#txtFromDate").val();
+        var toDate = $("#txtToDate").val();
+        var person = this.value;
+        var group  = $("#formControlSelectGroup").val();
+        var params = ["FromDate", "ToDate", "PersonId", "GroupId"];
+        var values = [fromDate, toDate, person, group];
+        var dataString = createJSON(params, values);
+
+        ajaxCall(url, "POST", dataString, "application/json", function(res)
+        {
+            console.log(dataString);
+            var data = res.ResponseObject;
+            var html = "<option>Select School</option>";
+            for(var index=0; index<data.length; index++)
+            {
+                html += "<option value='" + data[index].LeadId + "'>" + data[index].LeadName + " </option>";
+            }
+            $("#formControlSelectSchool").html(html);
+        });
+    }
+    else
+    {
+        alert("Please Select a valid Person.");
     }
 }

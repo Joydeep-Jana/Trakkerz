@@ -18,8 +18,25 @@ $(document).on("click", "#btnSubmit", function()
     var toDate = $("#txtToDate").val();
     var person = $("#formControlSelectPerson").val();
     var group  = $("#formControlSelectGroup").val();
-    var status = "E";
-    
+    var status  = $("#formControlSelectStatus").val();
+    switch(status)
+    {
+        case "Suspecting": 
+        status="S";
+        break;
+        case "Prospecting": 
+        status="E";
+        break;
+        case "Expecting": 
+        status="E";
+        break;
+        case "Not Done": 
+        status="N";
+        break;
+        case "Done": 
+        status="D";
+        break;
+    }
     if(fromDate == "")
     {
         alert("Please enter From Date");
@@ -78,7 +95,7 @@ function expectedActivitySuccess(res)
             innerDetails["Next_appointment_date"] = nextAppointmentDate;
             innerDetails["City"] = city;
             innerDetails["State"] = state;
-
+            
             excelDownload[excelDownload.length]=innerDetails;
             
             html += '<div>' +

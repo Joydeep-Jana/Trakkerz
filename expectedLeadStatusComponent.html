@@ -5,7 +5,7 @@
 			Status of Expected Leads
 		</div>
 	</div>
-
+	
 	<div class="row no-gutters px-3">
 		<div class="col-md-5 col-sm-5 col-12">
 			<div class="form-group">
@@ -20,37 +20,52 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="row no-gutters px-3">
-			<div class="col-md-5 col-sm-5 col-12">
-				<div class="form-group">
-					<label for="formControlSelectPerson">Select Group</label>
-					<select class="form-control rounded-0" id="formControlSelectGroup">
-						<option value=0>Select Group</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-md-5 col-sm-5 col-12 offset-md-2 offset-sm-2">
-				<div class="form-group">
-					<label for="formControlSelectGroup">Select Person</label>
-					<select class="form-control rounded-0" id="formControlSelectPerson">
-						<option>Select Person</option>
-					</select>
-				</div>
+		<div class="col-md-5 col-sm-5 col-12">
+			<div class="form-group">
+				<label for="formControlSelectPerson">Select Group</label>
+				<select class="form-control rounded-0" id="formControlSelectGroup">
+					<option value=0>Select Group</option>
+				</select>
 			</div>
 		</div>
-		<!-- TZ-519 Aishwarya added this code to download csv  -->
-		<div class="row no-gutters px-3">
-			<div class="col-md-9 col-sm-10 col-10">
-				<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnSubmit" >Submit</button>
-			</div>
-			<div id = "downloadExcel"class="col-md-3">
+		<div class="col-md-5 col-sm-5 col-12 offset-md-2 offset-sm-2">
+			<div class="form-group">
+				<label for="formControlSelectGroup">Select Person</label>
+				<select class="form-control rounded-0" id="formControlSelectPerson">
+					<option>Select Person</option>
+				</select>
 			</div>
 		</div>
+	</div>
+	<div class="row no-gutters px-3">
+		<div class="col-md-5 col-sm-5 col-12">
+			<div class="form-group">
+				<label for="formControlSelectStatus">Select Status</label>
+				<select class="form-control rounded-0" id="formControlSelectStatus">
+					<option value=0>Select status</option>
+					<option>Suspecting</option>
+                    <option>Prospecting</option>
+                    <option>Expecting</option>
+                    <option>Not Done</option>
+                    <option>Done</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<!-- TZ-519 Aishwarya added this code to download csv  -->
+	<div class="row no-gutters px-3">
+		<div class="col-md-9 col-sm-10 col-10">
+			<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnSubmit" >Submit</button>
+		</div>
+		<div id = "downloadExcel"class="col-md-3">
+		</div>
+	</div>
 </div>
 
 <div class="bg-white px-2 py-3 mt-2">
-    <div class="expectedActivityForLead">	
+	<div class="expectedActivityForLead">	
 		<h6 class="border-bottom text-muted">Your Result will be shown here.</h6>
-    </div>
+	</div>
 </div>

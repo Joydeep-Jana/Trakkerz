@@ -123,7 +123,7 @@ function activitySuccess(res)
                 }
             }
         }
-        var tableData = '<table id="activityTableReport" class="table table-striped table-bordered table-responsive">'+
+        var tableData = '<table id="activityTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
         '<thead>' +
         '<tr>' +                   
         '<th>Person Name</th>' +
@@ -144,7 +144,8 @@ function activitySuccess(res)
 	}
 	else
 	{
+        $("#loaderForActivityResult").hide();
         alert("Sorry, No Records found.");
-		$("#activityTableRows").html("Sorry, No Records found.");	
+		//$("#activityTableRows").html("Sorry, No Records found.");	
 	}
 }
