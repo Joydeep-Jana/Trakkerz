@@ -11,6 +11,15 @@ $(document).ready(function()
 		JSONToCSVConvertor(data, "ExcelDownloadForActivity", true);
 	});
 });
+/*+Aishwarya TZ#523 06/08/2018 added this code*/
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+        return false;
+    }
+    return true;
+}
+/*-Aishwarya TZ#523 06/08/2018 added this code*/
 function gatherGroups()
 {
     var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
@@ -100,52 +109,62 @@ function activitySuccess(res)
             {
                 var personName = res[i].PersonName;
                 var activities = res[i].Activities;
-                for(activityIndex=0;activityIndex<activities.length;activityIndex++)
+                if(!isEmpty(activities))
                 {
-                    var name=activities[activityIndex]["Name"];
-                    var schoolName=activities[activityIndex]["SchoolName"];
-                    var time=activities[activityIndex]["Time"];
-                    var innerDetails = {};
-                    innerDetails["Person_Name"] = personName;
-                    innerDetails["Activity_Name"] = name;
-                    innerDetails["School_Name"] = schoolName;
-                    innerDetails["Time"] = time;
-                    excelDownload[excelDownload.length]=innerDetails;
-                    
-                    html += '<div>' +
-                    '<tr>' + 
-                    '<td>' + personName + '</td>' +
-                    '<td>' + name + '</td>' +  
-                    '<td>' + schoolName + '</td>' +
-                    '<td>' + time + '</td>' +
+                    for(activityIndex=0;activityIndex<activities.length;activityIndex++)
+                    {
+                        var name=activities[activityIndex]["Name"];
+                        var schoolName=activities[activityIndex]["SchoolName"];
+                        var time=activities[activityIndex]["Time"];
+                        var innerDetails = {};
+                        innerDetails["Person_Name"] = personName;
+                        innerDetails["Activity_Name"] = name;
+                        innerDetails["School_Name"] = schoolName;
+                        innerDetails["Time"] = time;
+                        excelDownload[excelDownload.length]=innerDetails;
+                        
+                        html += '<div>' +
+                        '<tr>' + 
+                        '<td>' + personName + '</td>' +
+                        '<td>' + name + '</td>' +  
+                        '<td>' + schoolName + '</td>' +
+                        '<td>' + time + '</td>' +
+                        '</tr>' +
+                        '</div>';
+                    }
+                    var tableData = '<table id="activityTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
+                    '<thead>' +
+                    '<tr>' +                   
+                    '<th>Person Name</th>' +
+                    '<th>Activity Name</th>' + 
+                    '<th>School Name</th>' + 
+                    '<th>Time</th>' + 
                     '</tr>' +
-                    '</div>';
+                    '</thead>' +
+                    '<tbody id="activityTableRows">' +
+                    '</tbody>' +
+                    '</table>';
+                    var downloadButton = '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';
+                    $(".activityTableForLead").html(tableData);
+                    $("#downloadExcel").html(downloadButton);
+                    $("#activityTableRows").html(html);
+                    $('#activityTableReport').DataTable(); 
+                    localStorage.setItem("ExcelDownloadForActivity",JSON.stringify(excelDownload));
+                }
+                else
+                {
+                    /*+Aishwarya TZ#523 06/08/2018 added this code*/
+                    result='<h6 class="border-bottom text-muted">No activity found for ' + personName + ' on this date.</h6>';
+                    $(".activityTableForLead").html(result);
+                    $("#loaderForActivityResult").hide();
                 }
             }
         }
-        var tableData = '<table id="activityTableReport" class="table table-striped table-bordered table-responsive" style="width:100%">'+
-        '<thead>' +
-        '<tr>' +                   
-        '<th>Person Name</th>' +
-        '<th>Activity Name</th>' + 
-        '<th>School Name</th>' + 
-        '<th>Time</th>' + 
-        '</tr>' +
-        '</thead>' +
-        '<tbody id="activityTableRows">' +
-        '</tbody>' +
-        '</table>';
-        var downloadButton = '<button type="button" class="btn btn-primary rounded-0 text-uppercase" id="btnDownload" >Download Excel</button>';
-        $(".activityTableForLead").html(tableData);
-        $("#downloadExcel").html(downloadButton);
-		$("#activityTableRows").html(html);
-        $('#activityTableReport').DataTable(); 
-        localStorage.setItem("ExcelDownloadForActivity",JSON.stringify(excelDownload));
-	}
-	else
-	{
+    }
+    else
+    {
         $("#loaderForActivityResult").hide();
-        alert("Sorry, No Records found.");
-		//$("#activityTableRows").html("Sorry, No Records found.");	
-	}
+        alert("Sorry, No Records found.");	
+        /*-Aishwarya TZ#523 06/08/2018 added this code*/
+    }
 }
