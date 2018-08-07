@@ -64,6 +64,7 @@ function groupChanged()
 }
 $(document).on("click", "#btnSubmit", function()
 {
+    //  TZ#523 Aishwarya added this code to add loader 
     var htmlLoader='<img src="src/img/loader.svg" alt="loader" width="80"/>';
     $("#loaderForActivityResult").html(htmlLoader);
     var selDate = $("#selDate").val();
@@ -96,6 +97,7 @@ function activitySuccess(res)
     if(res.IsOk)
 	{
         //console.log(res);
+        //  TZ#523 Aishwarya added this code to add loader 
         $("#loaderForActivityResult").hide();
         var person=localStorage.getItem("PersonId");
         //console.log(person);
@@ -163,6 +165,7 @@ function activitySuccess(res)
     }
     else
     {
+        //  TZ#523 Aishwarya added this code to add loader 
         $("#loaderForActivityResult").hide();
         alert("Sorry, No Records found.");	
         /*-Aishwarya TZ#523 06/08/2018 added this code*/
