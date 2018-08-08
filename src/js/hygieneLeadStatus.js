@@ -25,37 +25,105 @@ $(document).ready(function()
         var person = $("#formControlSelectPerson").val();
         var group  = $("#formControlSelectGroup").val();
         
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
         if(fromDate == "")
         {
-            alert("Please enter From Date");
-            return false;
+            $.confirm(
+                {
+                    title: 'Alert!',
+                    content: "Please enter From Date",
+                    type: 'blue',
+                    animateFromElement: false,
+                    animation: 'top',
+                    closeAnimation: 'scale',
+                    draggable: true,
+                    buttons: 
+                    {
+                        Ok: 
+                        {
+                            text: 'Ok',
+                            btnClass: 'btn-blue',
+                            keys: ['enter'],
+                            action: function()
+                            { 
+                            }
+                        },
+                        close: function () 
+                        {
+                        }
+                    }
+                });
+                return false;
         }
         if(toDate == "")
         {
-            alert("Please enter To Date");
-            return false;
+            $.confirm(
+                {
+                    title: 'Alert!',
+                    content: "Please enter To Date",
+                    type: 'blue',
+                    animateFromElement: false,
+                    animation: 'top',
+                    closeAnimation: 'scale',
+                    draggable: true,
+                    buttons: 
+                    {
+                        Ok: 
+                        {
+                            text: 'Ok',
+                            btnClass: 'btn-blue',
+                            keys: ['enter'],
+                            action: function()
+                            { 
+                            }
+                        },
+                        close: function () 
+                        {
+                        }
+                    }
+                });
+                return false;
         }
         if(toDate < fromDate)
         {
-            alert("From date should be before To date!");
-            return false;
-        }
+            $.confirm(
+                {
+                    title: 'Alert!',
+                    content: "From date should be before To date!",
+                    type: 'blue',
+                    animateFromElement: false,
+                    animation: 'top',
+                    closeAnimation: 'scale',
+                    draggable: true,
+                    buttons: 
+                    {
+                        Ok: 
+                        {
+                            text: 'Ok',
+                            btnClass: 'btn-blue',
+                            keys: ['enter'],
+                            action: function()
+                            { 
+                            }
+                        },
+                        close: function () 
+                        {
+                        }
+                    }
+                });
+                return false;
+            }
+        /*-TZ-542 Aishwarya 07/08/2018 added alert box*/
         localStorage.setItem("FromDate", fromDate);
         localStorage.setItem("ToDate", toDate);
         
-        
-        // if(person == "")
-        // person=8856;
-        // if(group == "")
-        // group=7598;
-        
-        var url = "http://Management.trakkerz.com/api/Reports/HygieneCheckForLeads";
+        /*-TZ-542 Aishwarya 07/08/2018 added base url*/
+        var url = TRAKKERZ_REPORTS_BASE_URL + "Reports/HygieneCheckForLeads";
         var params = ["FromDate", "ToDate", "PersonId", "GroupId"];
         var values = [fromDate, toDate, person, group];
         
         var dataString = createJSON(params, values);
-        
-        //alert(dataString);
+
         ajaxCall(url, "POST", dataString, "application/json", hygieneLeadSuccess);		
         
     });
@@ -230,7 +298,33 @@ $(document).ready(function()
         }
         else
         {
-            alert("Sorry, No Records found.");
+            /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+            $.confirm(
+                {
+                    title: 'Alert!',
+                    content: "Sorry, No Records found",
+                    type: 'blue',
+                    animateFromElement: false,
+                    animation: 'top',
+                    closeAnimation: 'scale',
+                    draggable: true,
+                    buttons: 
+                    {
+                        Ok: 
+                        {
+                            text: 'Ok',
+                            btnClass: 'btn-blue',
+                            keys: ['enter'],
+                            action: function()
+                            { 
+                            }
+                        },
+                        close: function () 
+                        {
+                        }
+                    }
+                });
+                /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
             table.clear().draw();	
         }
     }
@@ -243,7 +337,8 @@ $(document).on("click", "[id^='viewHygieneTable_']", function()
 });
 function gatherGroups()
 {
-    var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
+    /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url = TRAKKERZ_GROUPS_BASE_URL + "GetGroupsByOrganizationId";
     var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
@@ -267,7 +362,8 @@ function groupChanged()
 {
     if(this.value != "" && this.value != "Select Group")
     {
-        var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
+        /*TZ-542 Aishwarya 07/08/2018 added base url */
+        var url = TRAKKERZ_GROUPS_BASE_URL + "GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
             var data = res.ResponseObject;
@@ -281,7 +377,33 @@ function groupChanged()
     }
     else
     {
-        alert("Please Select a valid Group.");
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please Select a valid Group.",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+        /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
     }
 }
 function _convertDate(str)

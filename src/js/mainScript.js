@@ -1,3 +1,6 @@
+/*TZ-542 Aishwarya 07/08/2018 added base url */
+var TRAKKERZ_REPORTS_BASE_URL = "https://management.trakkerz.com/api/";
+var TRAKKERZ_GROUPS_BASE_URL = "https://trakkerz.trakkerz.com/api/Groups/";
 $(document).ready(function()
 {
     $("#col1").on("click", "#linkHygieneCheckReport", function()

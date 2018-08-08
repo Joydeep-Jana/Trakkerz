@@ -28,20 +28,69 @@ $(document).on("click", "#btnSubmit", function()
 {
     var group  = $("#formControlSelectGroup").val();
     var person = $("#formControlSelectPerson").val();
-    
-    if(person == "")
+    /*+TZ-542 Aishwarya 08/08/2018 added alert box*/
+    if(group == 0)
     {
-        alert("Please select Person");
-        return false;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please select Group",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
+    }
+    if(person == 0)
+    {
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please enter Person",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
 
-    if(group == "")
-    {
-        alert("Please select Group");
-        return false;
-    }
-
-    var url = "https://management.trakkerz.com/api/Reports/ActivityAgeing";
+     /*-TZ-542 Aishwarya 08/08/2018 added alert box*/
+     /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url=TRAKKERZ_REPORTS_BASE_URL + "/Reports/ActivityAgeing";
     var params = ["GroupId","PersonId"];
     var values = [group, person];
     var dataString = createJSON(params, values);
@@ -147,14 +196,40 @@ function agiengSuccess(res)
 	}
 	else
 	{
-        alert("Sorry, No Records found.");
-		$("#agiengTableRows").html("Sorry, No Records found.");	
+        /*+ TZ-542 Aishwarya 08/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Sorry, No Records found",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+        /*- TZ-542 Aishwarya 08/08/2018 added alert box*/
 	}
 }
 
 function gatherGroups()
 {
-    var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
+    /*TZ-542 Aishwarya 08/08/2018 added base url */
+    var url = TRAKKERZ_GROUPS_BASE_URL + "GetGroupsByOrganizationId";
     var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
@@ -178,7 +253,8 @@ function groupChanged()
 {
     if(this.value != "" && this.value != "Select Group")
     {
-        var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
+        /*TZ-542 Aishwarya 08/08/2018 added base url */
+        var url = TRAKKERZ_GROUPS_BASE_URL + "GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
             var data = res.ResponseObject;
@@ -192,7 +268,33 @@ function groupChanged()
     }
     else
     {
-        alert("Please Select a valid Group.");
+        /*+ TZ-542 Aishwarya 08/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please Select a valid Group.",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+        /*- TZ-542 Aishwarya 08/08/2018 added alert box*/
     }
 }
 //- TZ#507 06/08/2018 Aishwarya added Report for Ageing of Activities

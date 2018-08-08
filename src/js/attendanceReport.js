@@ -12,7 +12,8 @@ $(document).ready(function()
 });
 function gatherGroups()
 {
-    var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
+    /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url = TRAKKERZ_GROUPS_BASE_URL + "GetGroupsByOrganizationId";
     var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
@@ -36,19 +37,68 @@ $(document).on("click", "#btnSubmit", function()
     var activityDate = $("#txtDate").val();
     var group  = $("#formControlSelectGroup").val();
     var organizationId=1;
-    
+    /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
     if(activityDate == "")
     {
-        alert("Please select Date");
-        return false;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please enter Date",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
-    if(group == "")
+    if(group == 0)
     {
-        alert("Please select Group");
-        return false;
-    }
-
-    var url = "https://management.trakkerz.com/api/Actions/FetchActivityHistoryPerday";
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please select Group",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
+        }
+        /*-TZ-542 Aishwarya 07/08/2018 added alert box*/
+        /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url = TRAKKERZ_REPORTS_BASE_URL + "Actions/FetchActivityHistoryPerday";
     var params = ["OrganizationId","GroupId","ActivityDate"];
     var values = [organizationId,group,activityDate];
     
@@ -121,7 +171,33 @@ function attendanceSuccess(res)
     }
     else
     {
-        alert("Sorry, No records found.");
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Sorry, No Records found",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
         $("#activityTableRows").html("Sorry, No Records found.");	
     }
 }

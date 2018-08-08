@@ -25,31 +25,104 @@ $(document).ready(function(){
 
 function submited()
 {
-    var url="http://Management.trakkerz.com/api/Reports/FetchRouteHistory";
+    /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url=TRAKKERZ_REPORTS_BASE_URL + "Reports/FetchRouteHistory";
     var date = $("#selFromDate").val();
     var personId = $("#formControlSelectPerson").val();
     var group = $("#formControlSelectGroup").val();
+    /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
     if(date == "")
     {
-        alert("Please select a date");
-        return;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please enter Date",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
     if(group == 0)
     {
-        alert("Please select a group");
-        return;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please select a group",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
     if(personId == 0)
     {
-        alert("Please select a person");
-        return;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please select a person",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
-    
+    /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
     var params = ["OrganizationId","PersonId", "GroupId", "ActivityDate"];
-    var values = [1, 8856, 7598, date];
-    // var values = [1, personId, group, date];
+    //var values = [1, 8856, 7598, date];
+    var values = [1, personId, group, date];
     var dataString = createJSON(params,values);
-    console.log(dataString);
     ajaxCall(url, "POST", dataString, "application/json", submitedResponse);
 }
 
@@ -83,13 +156,40 @@ function submitedResponse(res)
         drawRoute(pathDetails);
     }
     else{
-        alert(res.Message);
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Sorry, No Records found",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
     }
 }
 
 function gatherGroups()
 {
-    var url = "http://trakkerz.trakkerz.com/api/Groups/GetGroupsByOrganizationId";
+    /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url = TRAKKERZ_GROUPS_BASE_URL + "GetGroupsByOrganizationId";
     var dataString = {"OrganizationId":1};
     dataString = JSON.stringify(dataString);
     ajaxCall(url, "POST", dataString, "application/json", function(res)
@@ -112,7 +212,8 @@ function groupChanged()
 {
     if(this.value != "" && this.value != "Select Group")
     {
-        var url = "http://trakkerz.trakkerz.com/api/Groups/GetMembersByGroupId";
+        /*TZ-542 Aishwarya 07/08/2018 added base url */
+        var url = TRAKKERZ_GROUPS_BASE_URL + "GetMembersByGroupId";
         var dataString = "{'GroupId':" + this.value + "}";
         ajaxCall(url, "POST", dataString, "application/json", function(res){
             // console.log(res);
@@ -127,7 +228,33 @@ function groupChanged()
     }
     else
     {
-        alert("Please Select a valid Group.");
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please Select a valid Group.",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+        /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
     }
 }
 

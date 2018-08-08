@@ -21,15 +21,40 @@ $(document).on("click", "#btnSubmit", function()
 {
     var selDate = $("#txtDate").val();
     var featureName= "CREATED";
-    
+    /*+TZ-542 Aishwarya 07/08/2018 added alert box*/
     if(selDate == "")
     {
-        alert("Please select Date");
-        return false;
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Please enter Date",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+            return false;
     }
     selDate=_convertDate(selDate);
     
-    var url = "https://management.trakkerz.com/api/Actions/FetchLeadDetailsByParams";
+    /*TZ-542 Aishwarya 07/08/2018 added base url */
+    var url=TRAKKERZ_REPORTS_BASE_URL + "Actions/FetchLeadDetailsByParams";
     var params = ["FeatureName","FeatureValue"];
     var values = [featureName,selDate];
     
@@ -42,7 +67,6 @@ function leadSuccess(res)
 {
     if(res.IsOk)
 	{
-        console.log(res);
         res = res.ResponseObject;
         var html = '';
         var excelDownload=[];
@@ -132,7 +156,33 @@ function leadSuccess(res)
 	}
 	else
 	{
-        alert("Sorry, No Records found.");
-		$("#leadTableRows").html("Sorry, No Records found.");	
+        /*+ TZ-542 Aishwarya 07/08/2018 added alert box*/
+        $.confirm(
+            {
+                title: 'Alert!',
+                content: "Sorry, No Records found",
+                type: 'blue',
+                animateFromElement: false,
+                animation: 'top',
+                closeAnimation: 'scale',
+                draggable: true,
+                buttons: 
+                {
+                    Ok: 
+                    {
+                        text: 'Ok',
+                        btnClass: 'btn-blue',
+                        keys: ['enter'],
+                        action: function()
+                        { 
+                        }
+                    },
+                    close: function () 
+                    {
+                    }
+                }
+            });
+        /*- TZ-542 Aishwarya 07/08/2018 added alert box*/
+		//$("#leadTableRows").html("Sorry, No Records found.");	
 	}
 }
